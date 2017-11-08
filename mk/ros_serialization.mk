@@ -1,0 +1,19 @@
+ROS_SERIALIZATION_PATH := ${ROSCORE_PATH}/roscpp_serialization
+
+ROS_SERIALIZATION_SRC := ${ROS_SERIALIZATION_PATH}/src/serialization.cpp
+ROS_SERIALIZATION_OBJ := $(ROS_SERIALIZATION_SRC:.cpp=.o)
+
+-include ${ROS_SERIALIZATION_PATH}/src/*.d
+
+ROS_SERIALIZATION_LIB := lib/libros_serialization.a
+
+${ROS_SERIALIZATION_LIB}: ${ROS_SERIALIZATION_OBJ}
+	@echo AR $@
+	@ar rcs $@ $^
+
+ALL_OBJ := ${ALL_OBJ} ${ROS_SERIALIZATION_OBJ}
+ALL_LIB := ${ALL_LIB} ${ROS_SERIALIZATION_LIB}
+
+CXXFLAGS := ${CXXFLAGS} -I${ROSCORE_PATH}/roscpp_serialization/include
+
+

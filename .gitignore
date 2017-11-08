@@ -1,0 +1,8 @@
+*.o
+/snoopy
+*.d
+
+Session.vim
+tags
+lib/libros_serialization.a
+lib/librostime.a
