@@ -4,13 +4,28 @@ CXX ?= clang++
 INCLUDEDIRS := -I./include -I./deps/spdlog/include
 CXXFLAGS := -O0 -g -std=c++14 -Wall -Wextra ${INCLUDEDIRS}
 
+#To compile for beagleboard e.g. use this compiler from buildroot
 #CXX := arm-buildroot-linux-musleabihf-g++
 #LDFLAGS := -static -lboost_thread -lboost_system
 
 # For static linking, TODO: check out how musl works together with c++
 LDFLAGS := -static -L/usr/lib/x86_64-linux-gnu/ -lboost_thread -lboost_system -lpthread
 
-HDR := include/CanSocket.h \
+HDR := include/canconnection.h \
+	include/Can.h \
+	include/canlistener.h \
+	include/gonzales.h \
+	include/logging.h \
+	include/MCDC.h \
+	include/MCDCProtocol.h \
+	include/pcanconnect.h \
+	include/Proxy.h \
+	include/RosHelper.h \
+	include/settings.h \
+	include/udpcanconnection.h \
+	include/usbcanconnection.h \
+	include/util.h \
+	include/utils.h \
 
 SRC := src/settings.cpp \
   src/driver/controller.cpp \

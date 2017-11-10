@@ -1,7 +1,7 @@
-#include <stdio.h>
 #include <pthread.h>
-#include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <spdlog/spdlog.h>
 
@@ -9,16 +9,16 @@
 #include <udpcanconnection.h>
 #include <usbcanconnection.h>
 
-#include "settings.h"
 #include "gonzales.h"
 #include "logging.h"
+#include "settings.h"
 
 #include <string>
 
 #include <Proxy.h>
 
-#include <SystemConfig.h>
 #include <Configuration.h>
+#include <SystemConfig.h>
 
 #include <getopt.h>
 #define CONTROLLER_COUNT 4
@@ -26,7 +26,6 @@
 using namespace msl_msgs;
 using namespace std;
 extern gonzales_state gonz_state;
-
 
 void
 print_usage(const char* prog_name) {
@@ -66,24 +65,23 @@ parse_options(int argc, char* argv[]) {
 	return opts;
 }
 
-
-
 struct timeval time_last;
 struct timeval time_cur;
 
 Controlling::EposCan* ep;
 
-int main(int argc, char** argv) {
+int
+main(int argc, char** argv) {
 	const auto opts = parse_options(argc, argv);
 	auto console = spdlog::stdout_logger_mt("logger");
 	console->set_level(opts.log_level);
 	settings_init();
 
 	UsbCanConnection* cc = new UsbCanConnection(opts.can_interface.c_str());
-	ep = new Controlling::EposCan(CONTROLLER_COUNT,cc);
+	ep = new Controlling::EposCan(CONTROLLER_COUNT, cc);
 
-	gonz_init(); //init main controller
-    logging_init();
+	gonz_init(); // init main controller
+	logging_init();
 
 	Proxy* proxy;
 	try {
@@ -96,33 +94,30 @@ int main(int argc, char** argv) {
 	cc->Start();
 	usleep(30000);
 
-	while(ep->InitAllNodes()<=0) {
-        std::cout << "Could not initialise all controllers! Retrying...\n";
+	while (ep->InitAllNodes() <= 0) {
+		std::cout << "Could not initialise all controllers! Retrying...\n";
 		usleep(500000);
 	};
 
-    gonz_state.currentMotionGoal.x = 0;
-    gonz_state.currentMotionGoal.y = 0;
-    gonz_state.currentMotionGoal.rotation = 0;
+	gonz_state.currentMotionGoal.x = 0;
+	gonz_state.currentMotionGoal.y = 0;
+	gonz_state.currentMotionGoal.rotation = 0;
 
-	while(true) {
+	while (true) {
 		MotionInfo* cmd;
-		gettimeofday(&time_last,NULL);
+		gettimeofday(&time_last, NULL);
 
-		//TODO: Get motion from proxy
+		// TODO: Get motion from proxy
 		cmd = proxy->get_motion();
-		if (cmd!=NULL) {
-			//printf("GOT COMMAND\n");
-			gonz_set_motion_request(
-					(cmd)->angle,
-					(cmd)->translation,
-					(cmd)->rotation
-					);				
-			//printf("MM CURCMD %f\t%f\t%f\n",gonz_state.currentMotionGoal.x,gonz_state.currentMotionGoal.y,gonz_state.currentMotionGoal.rotation);
+		if (cmd != NULL) {
+			// printf("GOT COMMAND\n");
+			gonz_set_motion_request((cmd)->angle, (cmd)->translation, (cmd)->rotation);
+			// printf("MM CURCMD
+			// %f\t%f\t%f\n",gonz_state.currentMotionGoal.x,gonz_state.currentMotionGoal.y,gonz_state.currentMotionGoal.rotation);
 
 			gonz_main();
 		} else {
-			//printf("Command Timeout!\n");
+			// printf("Command Timeout!\n");
 			gonz_idle();
 		}
 		break;
@@ -130,11 +125,13 @@ int main(int argc, char** argv) {
 		/* cout<<"EposGonzales::main logging data"<<endl; */
 		/* logData(); */
 
-		gettimeofday(&time_cur,NULL);
-		//printf("Sleeping for: %ldus\n",current_settings.controllerLoopTime*1000l-TIMEDIFFMS(time_cur,time_last));
-		usleep(max(10l,(current_settings.controllerLoopTime-TIMEDIFFMS(time_cur,time_last))*1000l));
+		gettimeofday(&time_cur, NULL);
+		// printf("Sleeping for:
+		// %ldus\n",current_settings.controllerLoopTime*1000l-TIMEDIFFMS(time_cur,time_last));
+		usleep(max(
+		    10l, (current_settings.controllerLoopTime - TIMEDIFFMS(time_cur, time_last)) *
+		             1000l));
 	}
 
 	return 0;
 }
-

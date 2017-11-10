@@ -108,7 +108,8 @@ Proxy::handle_packet(const boost::system::error_code& error,
 	return;
 }
 
-#define TIMEDIFFMS(n,o) ((n).tv_sec-(o).tv_sec)*1000+((n).tv_usec-(o).tv_usec)/1000
+#define TIMEDIFFMS(n, o)                                                                 \
+	((n).tv_sec - (o).tv_sec) * 1000 + ((n).tv_usec - (o).tv_usec) / 1000
 #include <settings.h>
 extern controller_settings current_settings;
 
@@ -116,9 +117,11 @@ MotionInfo*
 Proxy::get_motion() {
 	static struct timeval cur_time;
 	gettimeofday(&cur_time, NULL);
-	if (TIMEDIFFMS(cur_time,last_cmd_received) > current_settings.commandTimeout) {
+	if (TIMEDIFFMS(cur_time, last_cmd_received) > current_settings.commandTimeout) {
 
-        //std::cout << "Time diff to large: last:" << last_cmd_received.tv_sec << " " << last_cmd_received.tv_usec << " cur: " << cur_time.tv_sec << " " << cur_time.tv_usec << std::endl;
+		// std::cout << "Time diff to large: last:" << last_cmd_received.tv_sec << "
+		// " << last_cmd_received.tv_usec << " cur: " << cur_time.tv_sec << " " <<
+		// cur_time.tv_usec << std::endl;
 		return nullptr;
 	}
 	return &current_command;

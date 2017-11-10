@@ -1,21 +1,19 @@
 #ifndef logging_h
 #define logging_h 1
 
+#include "driver/eposcan.h"
+#include "gonzales.h"
 #include <stdio.h>
 #include <string>
-#include "gonzales.h"
-#include "driver/eposcan.h"
 
-#include <SystemConfig.h>
 #include <Configuration.h>
-
+#include <SystemConfig.h>
 
 extern gonzales_state gonz_state;
 
-
-void logging_init();
-void logData();
-
-
+void
+logging_init();
+void
+logData();
 
 #endif

@@ -21,8 +21,8 @@
 
 #include <spdlog/spdlog.h>
 
-#include <msl_actuator_msgs/RawOdometryInfo.h>
 #include <msl_actuator_msgs/MotionControl.h>
+#include <msl_actuator_msgs/RawOdometryInfo.h>
 
 using boost::asio::ip::udp;
 using boost::asio::ip::address;

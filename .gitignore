@@ -1,8 +1,7 @@
 *.o
-/snoopy
+/gonzales_bbb
 *.d
 
 Session.vim
 tags
-lib/libros_serialization.a
-lib/librostime.a
+lib/*.a
