@@ -19,6 +19,7 @@
 //#include <fcntl.h>
 #include "canlistener.h"
 #include "canconnection.h"
+#include <sys/time.h>
 
 #ifndef CAN_TIMEOUT
 #define CAN_TIMEOUT 800

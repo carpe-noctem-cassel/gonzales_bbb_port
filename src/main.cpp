@@ -76,6 +76,7 @@ Controlling::EposCan* ep;
 int main(int argc, char** argv) {
 	const auto opts = parse_options(argc, argv);
 	auto console = spdlog::stdout_logger_mt("logger");
+	console->set_level(opts.log_level);
 	settings_init();
 
 	UsbCanConnection* cc = new UsbCanConnection(opts.can_interface.c_str());
