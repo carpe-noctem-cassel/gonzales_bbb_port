@@ -70,6 +70,8 @@ struct timeval time_cur;
 
 Controlling::EposCan* ep;
 
+Proxy* proxy;
+
 int
 main(int argc, char** argv) {
 	const auto opts = parse_options(argc, argv);
@@ -83,7 +85,6 @@ main(int argc, char** argv) {
 	gonz_init(); // init main controller
 	logging_init();
 
-	Proxy* proxy;
 	try {
 		proxy = new Proxy(opts.multicast_address, opts.multicast_port);
 	} catch (const std::exception& e) {
@@ -107,9 +108,8 @@ main(int argc, char** argv) {
 		MotionInfo* cmd;
 		gettimeofday(&time_last, NULL);
 
-		// TODO: Get motion from proxy
 		cmd = proxy->get_motion();
-		if (cmd != NULL) {
+		if (cmd != nullptr) {
 			// printf("GOT COMMAND\n");
 			gonz_set_motion_request((cmd)->angle, (cmd)->translation, (cmd)->rotation);
 			// printf("MM CURCMD

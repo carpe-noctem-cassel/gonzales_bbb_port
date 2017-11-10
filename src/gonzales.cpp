@@ -7,6 +7,8 @@
 #include <DateTime.h>
 #include <string.h>
 
+#include <Proxy.h>
+
 #include <msl_actuator_msgs/MotionControl.h>
 #include <msl_actuator_msgs/RawOdometryInfo.h>
 
@@ -14,6 +16,8 @@
 
 using namespace msl_msgs;
 using namespace msl_actuator_msgs;
+
+extern Proxy* proxy;
 
 struct timeval gonz_last_calltime;
 struct timeval gonz_cur_calltime;
@@ -445,7 +449,8 @@ gonz_send_odometry() {
 	pi.y = gonz_state.currentPosition.y;
 
 	ro.position = pi;
-	// TODO: Send Odometry using proxy
+	proxy->sendOdometry(ro);
+
 	// std::cout << pi->getAngle() << "\t" << pi->getX() << "\t" << pi->getY() <<
 	// "\t" << ro->getTimestamp() <<"\n";
 }
