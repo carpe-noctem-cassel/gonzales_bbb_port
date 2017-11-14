@@ -19,9 +19,9 @@ ALL_OBJ := ${ALL_OBJ} ${ROSTIME_OBJ}
 ALL_LIB := ${ALL_LIB} ${ROSTIME_LIB}
 
 # TODO: Make include flags for library local?
-CXXFLAGS := ${CXXFLAGS} -I${ROSTIME_PATH}/include
-CXXFLAGS := ${CXXFLAGS} -I${ROSCORE_PATH}/cpp_common/include
-CXXFLAGS := ${CXXFLAGS} -I${ROSCORE_PATH}/roscpp_serialization/include
-CXXFLAGS := ${CXXFLAGS} -I${ROSCORE_PATH}/roscpp_traits/include
+G_CXXFLAGS := ${G_CXXFLAGS} -I${ROSTIME_PATH}/include
+G_CXXFLAGS := ${G_CXXFLAGS} -I${ROSCORE_PATH}/cpp_common/include
+G_CXXFLAGS := ${G_CXXFLAGS} -I${ROSCORE_PATH}/roscpp_serialization/include
+G_CXXFLAGS := ${G_CXXFLAGS} -I${ROSCORE_PATH}/roscpp_traits/include
 
 

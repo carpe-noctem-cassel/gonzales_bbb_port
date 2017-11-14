@@ -2,14 +2,14 @@
 CXX ?= clang++
 
 INCLUDEDIRS := -I./include -I./deps/spdlog/include
-CXXFLAGS := -O0 -g -std=c++14 -Wall -Wextra ${INCLUDEDIRS}
+G_CXXFLAGS := ${CXXFLAGS} ${INCLUDEDIRS} -std=c++14 -Wall -Wextra
 
 #To compile for beagleboard e.g. use this compiler from buildroot
 #CXX := arm-buildroot-linux-musleabihf-g++
 #LDFLAGS := -static -lboost_thread -lboost_system
 
 # For static linking, TODO: check out how musl works together with c++
-LDFLAGS := -static -L/usr/lib/x86_64-linux-gnu/ -lboost_thread -lboost_system -lpthread
+G_LDFLAGS := ${LDFLAGS} -lboost_thread -lboost_system -lpthread
 
 HDR := include/canconnection.h \
 	include/Can.h \
@@ -51,18 +51,18 @@ include mk/rostime.mk
 include mk/ros_serialization.mk
 include mk/system_config.mk
 include mk/fsystem.mk
-CXXFLAGS := ${CXXFLAGS} -I${ROSCORE_PATH}/cpp_common/include
-LDFLGAS := -L./lib -lros_serialization -lrostime -lros_cpp
+G_CXXFLAGS := ${G_CXXFLAGS} -I${ROSCORE_PATH}/cpp_common/include
+G_LDFLGAS := -L./lib -lros_serialization -lrostime -lros_cpp
 
 -include src/*.d
 
 %.o: %.cpp
 	@echo CXX $<
-	@${CXX} -MMD ${CXXFLAGS} -o $@ -c $<
+	${CXX} -MMD ${G_CXXFLAGS} -o $@ -c $<
 
 ${BINNAME}: ${OBJ} ${ALL_LIB}
 	@echo LD $@
-	@${CXX} -o $@ $^ ${LDFLAGS}
+	${CXX} -o $@ $^ ${G_LDFLAGS}
 
 fmt: ${SRC} ${HDR}
 	@echo FMT $^

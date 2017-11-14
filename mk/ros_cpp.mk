@@ -61,7 +61,7 @@ ${ROS_CPP_LIB}: ${ROS_CPP_OBJ}
 ALL_OBJ := ${ALL_OBJ} ${ROS_CPP_OBJ}
 ALL_LIB := ${ALL_LIB} ${ROS_CPP_LIB}
 
-CXXFLAGS := ${CXXFLAGS} -I${ROS_CPP_PATH}/include -I${ROS_COMM_PATH}/tools/rosconsole/include
+G_CXXFLAGS := ${G_CXXFLAGS} -I${ROS_CPP_PATH}/include -I${ROS_COMM_PATH}/tools/rosconsole/include
 
 
 
