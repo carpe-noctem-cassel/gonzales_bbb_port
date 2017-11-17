@@ -89,7 +89,7 @@ Proxy::handle_packet(const boost::system::error_code& error,
 		                                   bytes_transferred - sizeof(uint32_t));
 
 		switch (id) {
-		case topic_hash("MotionControl"): {
+		case topic_hash("/MotionControl"): {
 			using msl_actuator_msgs::MotionControl;
 			MotionControl mc;
 			ros::serialization::Serializer<MotionControl>::read(stream, mc);
