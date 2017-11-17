@@ -93,6 +93,7 @@ main(int argc, char** argv) {
 		exit(-1);
 	}
 
+
 	cc->Start();
 	usleep(30000);
 
@@ -108,7 +109,8 @@ main(int argc, char** argv) {
 	while (true) {
 		MotionInfo* cmd;
 		gettimeofday(&time_last, NULL);
-
+		// TODO: Asyc thread receiving?
+		proxy->run_udp();
 		cmd = proxy->get_motion();
 		if (cmd != nullptr) {
 			// printf("GOT COMMAND\n");
