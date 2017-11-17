@@ -22,7 +22,7 @@ settings_init() {
 	default_settings.thermalConstantWinding = 8;
 	default_settings.max_deccel = 30;
 
-	default_settings.definingAngle = 40.0 * PI / 180.0; // not read from config
+	default_settings.definingAngle = 65.0 * PI / 180.0;
 	default_settings.wheelRadius = 65;
 	default_settings.robotRadius = 280;
 	default_settings.odometrySamplingTime = 10;
@@ -41,6 +41,9 @@ settings_init() {
 
 	default_settings.gear_ratio_denominator =
 	    motion->get<int>("Motion", "Motors", "GearRatioDenum", NULL);
+	default_settings.definingAngle =
+	    motion->get<double>("Motion", "Motors", "DefiningAngle", NULL);
+
 	default_settings.gear_ratio_nominator =
 	    motion->get<int>("Motion", "Motors", "GearRatioNom", NULL);
 	default_settings.maxRPM = motion->get<int>("Motion", "Motors", "MaxRPM", NULL);

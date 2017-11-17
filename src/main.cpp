@@ -34,7 +34,7 @@ print_usage(const char* prog_name) {
 
 struct ProgramOptions {
 	std::string can_interface = "can0";
-	std::string multicast_address = "224.16.32.40";
+	std::string multicast_address = "225.16.32.40";
 	unsigned short multicast_port = 59873;
 	spdlog::level::level_enum log_level = spdlog::level::warn;
 };
@@ -106,6 +106,7 @@ main(int argc, char** argv) {
 	gonz_state.currentMotionGoal.y = 0;
 	gonz_state.currentMotionGoal.rotation = 0;
 
+	console->trace("Starting motion loop...");
 	while (true) {
 		MotionInfo* cmd;
 		gettimeofday(&time_last, NULL);
@@ -113,7 +114,7 @@ main(int argc, char** argv) {
 		proxy->run_udp();
 		cmd = proxy->get_motion();
 		if (cmd != nullptr) {
-			// printf("GOT COMMAND\n");
+			console->trace("Got motion command!");
 			gonz_set_motion_request((cmd)->angle, (cmd)->translation, (cmd)->rotation);
 			// printf("MM CURCMD
 			// %f\t%f\t%f\n",gonz_state.currentMotionGoal.x,gonz_state.currentMotionGoal.y,gonz_state.currentMotionGoal.rotation);
@@ -123,7 +124,6 @@ main(int argc, char** argv) {
 			// printf("Command Timeout!\n");
 			gonz_idle();
 		}
-		break;
 
 		/* cout<<"EposGonzales::main logging data"<<endl; */
 		/* logData(); */

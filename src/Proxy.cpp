@@ -14,7 +14,7 @@ using boost::asio::ip::udp;
  * This flag enables reuse_addr and loopback, which makes it to send/receive
  * the multicast traffic from the same machine.
  * */
-constexpr bool NETWORK_DEBUG = true;
+constexpr bool NETWORK_DEBUG = false;
 
 Proxy::Proxy(const std::string& multicast_address, unsigned short port) {
 	const auto mc_address = boost::asio::ip::address::from_string(multicast_address);
@@ -33,6 +33,7 @@ Proxy::Proxy(const std::string& multicast_address, unsigned short port) {
 
 	listen();
 	logger->debug("udp connection setup done");
+	logger->debug("MotionControl MsgID: {}", topic_hash("/MotionControl"));
 }
 
 Proxy::~Proxy() { service.stop(); }
