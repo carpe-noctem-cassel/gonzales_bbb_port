@@ -9,11 +9,7 @@
 #include <Configuration.h>
 #include <SystemConfig.h>
 
-extern gonzales_state gonz_state;
-
-void
-logging_init();
-void
-logData();
+// logData logs the motion state to the given file
+void logData(FILE* file);
 
 #endif

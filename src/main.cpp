@@ -29,7 +29,7 @@ extern gonzales_state gonz_state;
 
 void
 print_usage(const char* prog_name) {
-	printf("usage: %s [-i can_interface] [-m multicast_address] [-v [-v]] \n", prog_name);
+	printf("usage: %s [-i can_interface] [-m multicast_address] [-l] [-v [-v]] \n", prog_name);
 }
 
 struct ProgramOptions {
@@ -37,6 +37,7 @@ struct ProgramOptions {
 	std::string multicast_address = "226.16.32.40";
 	unsigned short multicast_port = 59873;
 	spdlog::level::level_enum log_level = spdlog::level::warn;
+	bool logging_enabled = false;
 };
 
 ProgramOptions
@@ -52,6 +53,9 @@ parse_options(int argc, char* argv[]) {
 			break;
 		case 'm':
 			opts.multicast_address = std::string(optarg);
+			break;
+		case 'l':
+			opts.logging_enabled = true;
 			break;
 		case 'v':
 			if (opts.log_level == spdlog::level::debug)
@@ -87,7 +91,6 @@ main(int argc, char** argv) {
 	ep = new Controlling::EposCan(CONTROLLER_COUNT, cc);
 
 	gonz_init(); // init main controller
-	logging_init();
 
 	try {
 		proxy = new Proxy(opts.multicast_address, opts.multicast_port);
@@ -95,7 +98,6 @@ main(int argc, char** argv) {
 		console->error("network/udp error: {}", e.what());
 		exit(-1);
 	}
-
 
 	cc->Start();
 	usleep(30000);
@@ -113,27 +115,23 @@ main(int argc, char** argv) {
 	while (true) {
 		MotionInfo* cmd;
 		gettimeofday(&time_last, NULL);
-		// TODO: Asyc thread receiving?
+
 		proxy->run_udp();
 		cmd = proxy->get_motion();
 		if (cmd != nullptr) {
 			console->trace("Got motion command!");
 			gonz_set_motion_request((cmd)->angle, (cmd)->translation, (cmd)->rotation);
-			// printf("MM CURCMD
-			// %f\t%f\t%f\n",gonz_state.currentMotionGoal.x,gonz_state.currentMotionGoal.y,gonz_state.currentMotionGoal.rotation);
-
 			gonz_main();
 		} else {
-			// printf("Command Timeout!\n");
 			gonz_idle();
 		}
 
-		/* cout<<"EposGonzales::main logging data"<<endl; */
-		/* logData(); */
+		// Log to stdout if enabled
+		if (opts.logging_enabled)
+			logData(stdout);
 
+		// Sleep to save processing time
 		gettimeofday(&time_cur, NULL);
-		// printf("Sleeping for:
-		// %ldus\n",current_settings.controllerLoopTime*1000l-TIMEDIFFMS(time_cur,time_last));
 		usleep(max(
 		    10l, (current_settings.controllerLoopTime - TIMEDIFFMS(time_cur, time_last)) *
 		             1000l));
