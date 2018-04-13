@@ -29,12 +29,12 @@ extern gonzales_state gonz_state;
 
 void
 print_usage(const char* prog_name) {
-	printf("usage: %s [-i can_interface] [-v [-v]] \n", prog_name);
+	printf("usage: %s [-i can_interface] [-m multicast_address] [-v [-v]] \n", prog_name);
 }
 
 struct ProgramOptions {
 	std::string can_interface = "can0";
-	std::string multicast_address = "225.16.32.40";
+	std::string multicast_address = "226.16.32.40";
 	unsigned short multicast_port = 59873;
 	spdlog::level::level_enum log_level = spdlog::level::warn;
 };
@@ -49,6 +49,9 @@ parse_options(int argc, char* argv[]) {
 		switch (c) {
 		case 'i':
 			opts.can_interface = std::string(optarg);
+			break;
+		case 'm':
+			opts.multicast_address = std::string(optarg);
 			break;
 		case 'v':
 			if (opts.log_level == spdlog::level::debug)
