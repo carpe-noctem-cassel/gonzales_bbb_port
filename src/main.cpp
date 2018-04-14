@@ -46,7 +46,7 @@ parse_options(int argc, char* argv[]) {
 
 	int c;
 	// TODO: Revise config using yaml or systemconfig?
-	while ((c = getopt(argc, argv, "i:hsv")) != -1)
+	while ((c = getopt(argc, argv, "i:hsvlm:")) != -1)
 		switch (c) {
 		case 'i':
 			opts.can_interface = std::string(optarg);
@@ -85,6 +85,11 @@ main(int argc, char** argv) {
 	auto console = spdlog::stdout_logger_mt("logger");
 	console->set_level(opts.log_level);
 	console->trace("log level set to: {}", opts.log_level);
+
+	if (opts.logging_enabled) {
+		console->trace("motion logging enabled");
+	}
+
 	settings_init();
 
 	UsbCanConnection* cc = new UsbCanConnection(opts.can_interface.c_str());
